@@ -9,9 +9,13 @@
  */
 package net.sf.jsqlparser.statement;
 
+import java.util.EnumSet;
+
 public class ShowColumnsStatement implements Statement {
 
     private String tableName;
+
+    private EnumSet<Modifiers> modifiers;
 
     public ShowColumnsStatement() {
         // empty constructor
@@ -31,7 +35,13 @@ public class ShowColumnsStatement implements Statement {
 
     @Override
     public String toString() {
-        return "SHOW COLUMNS FROM " + tableName;
+        StringBuilder builder = new StringBuilder();
+        builder.append("SHOW");
+        if (modifiers.contains(Modifiers.FULL)) {
+            builder.append(" FULL");
+        }
+        builder.append(" COLUMNS FROM ").append(tableName);
+        return builder.toString();
     }
 
     @Override
@@ -42,5 +52,17 @@ public class ShowColumnsStatement implements Statement {
     public ShowColumnsStatement withTableName(String tableName) {
         this.setTableName(tableName);
         return this;
+    }
+
+    public EnumSet<Modifiers> getModifiers() {
+        return modifiers;
+    }
+
+    public void setModifiers(EnumSet<Modifiers> modifiers) {
+        this.modifiers = modifiers;
+    }
+
+    public enum Modifiers {
+        FULL
     }
 }

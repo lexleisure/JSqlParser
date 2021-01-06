@@ -362,6 +362,7 @@ TOKEN: /* SQL Keywords. prefixed with K_ to avoid name clashes */
 |   <K_XMLTEXT:"XMLTEXT">
 |   <K_YAML:"YAML">
 |   <K_ZONE:"ZONE">
+|   <K_STATUS:"STATUS">
 }
 
 TOKEN : /* Stuff */
@@ -518,6 +519,12 @@ Statement SingleStatement() :
         |
         LOOKAHEAD(ShowTables())
         stm = ShowTables()
+        |
+        LOOKAHEAD(ShowTable())
+        stm = ShowTable()
+        |
+        LOOKAHEAD(ShowIndex())
+        stm = ShowIndex()
         |
         stm = Show()
         |
@@ -793,12 +800,33 @@ UseStatement Use(): {
 }
 
 ShowColumnsStatement ShowColumns(): {
+    ShowColumnsStatement showColumnsStatement;
     String tableName;
+    EnumSet<ShowColumnsStatement.Modifiers> modifiers =  EnumSet.noneOf(ShowColumnsStatement.Modifiers.class);
+
 }
 {
-    <K_SHOW> <K_COLUMNS> <K_FROM> tableName = RelObjectNameExt()
+    <K_SHOW>
+    [ <K_FULL> { modifiers.add(ShowColumnsStatement.Modifiers.FULL); } ]
+    <K_COLUMNS>
+    <K_FROM> tableName = RelObjectNameExt()
     {
-        return new ShowColumnsStatement(tableName);
+        showColumnsStatement = new ShowColumnsStatement(tableName);
+        showColumnsStatement.setModifiers(modifiers);
+        return showColumnsStatement;
+    }
+}
+
+ShowIndexStatement ShowIndex(): {
+    String tableName;
+
+}
+{
+    <K_SHOW>
+    <K_INDEX>
+    <K_FROM> tableName = RelObjectNameExt()
+    {
+        return new ShowIndexStatement(tableName);
     }
 }
 
@@ -832,6 +860,35 @@ ShowTablesStatement ShowTables(): {
     showTablesStatement.setLikeExpression(likeExpression);
     showTablesStatement.setWhereCondition(whereCondition);
     return showTablesStatement;
+  }
+}
+
+ShowTableStatement ShowTable(): {
+    ShowTableStatement showTableStatement;
+    ShowTableStatement.SelectionMode selectionMode = null;
+    String dbName = null;
+    Expression likeExpression = null;
+    Expression whereCondition = null;
+}
+{
+  <K_SHOW>
+  <K_TABLE>
+  <K_STATUS>
+  [
+    (
+      <K_FROM> {selectionMode = ShowTableStatement.SelectionMode.FROM; }
+    | <K_IN> { selectionMode = ShowTableStatement.SelectionMode.IN; }
+    )
+    dbName = RelObjectNameExt()
+  ]
+  [ (<K_LIKE> likeExpression = SimpleExpression() | <K_WHERE> whereCondition = Expression()) ]
+  {
+    showTableStatement = new ShowTableStatement();
+    showTableStatement.setSelectionMode(selectionMode);
+    showTableStatement.setDbName(dbName);
+    showTableStatement.setLikeExpression(likeExpression);
+    showTableStatement.setWhereCondition(whereCondition);
+    return showTableStatement;
   }
 }
 

@@ -9,16 +9,16 @@
  */
 package net.sf.jsqlparser.util.deparser;
 
-import net.sf.jsqlparser.statement.ShowColumnsStatement;
+import net.sf.jsqlparser.statement.show.ShowTableStatement;
 
-public class ShowColumnsStatementDeParser extends AbstractDeParser<ShowColumnsStatement> {
+public class ShowTableStatementDeParser extends AbstractDeParser<ShowTableStatement> {
 
-    public ShowColumnsStatementDeParser(StringBuilder buffer) {
+    public ShowTableStatementDeParser(StringBuilder buffer) {
         super(buffer);
     }
 
     @Override
-    public void deParse(ShowColumnsStatement show) {
+    public void deParse(ShowTableStatement show) {
         buffer.append(show);
     }
 }

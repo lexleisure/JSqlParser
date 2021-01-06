@@ -18,16 +18,11 @@ import static net.sf.jsqlparser.test.TestUtils.assertSqlCanBeParsedAndDeparsed;
  *
  * @author oshai
  */
-public class ShowColumnsStatementTest {
-
+public class ShowIndexStatementTest {
 
     @Test
     public void testSimpleUse() throws JSQLParserException {
-        assertSqlCanBeParsedAndDeparsed("SHOW COLUMNS FROM mydatabase");
+        assertSqlCanBeParsedAndDeparsed("SHOW INDEX FROM my_table");
     }
 
-    @Test
-    public void testSimpleUse1() throws JSQLParserException {
-        assertSqlCanBeParsedAndDeparsed("SHOW FULL COLUMNS FROM mydatabase");
-    }
 }
