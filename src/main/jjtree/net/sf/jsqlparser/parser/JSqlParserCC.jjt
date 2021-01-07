@@ -803,30 +803,76 @@ ShowColumnsStatement ShowColumns(): {
     ShowColumnsStatement showColumnsStatement;
     String tableName;
     EnumSet<ShowColumnsStatement.Modifiers> modifiers =  EnumSet.noneOf(ShowColumnsStatement.Modifiers.class);
-
+    ShowColumnsStatement.SelectionMode tableSelectionMode = null;
+    ShowColumnsStatement.SelectionMode dbSelectionMode = null;
+    String dbName = null;
+    Expression likeExpression = null;
+    Expression whereCondition = null;
 }
 {
     <K_SHOW>
     [ <K_FULL> { modifiers.add(ShowColumnsStatement.Modifiers.FULL); } ]
     <K_COLUMNS>
-    <K_FROM> tableName = RelObjectNameExt()
+    (
+         <K_FROM> {tableSelectionMode = ShowColumnsStatement.SelectionMode.FROM;}
+         |
+         <K_IN> {tableSelectionMode = ShowColumnsStatement.SelectionMode.IN;}
+    )
+    tableName = RelObjectNameExt()
+    [
+        (
+            <K_FROM> {dbSelectionMode = ShowColumnsStatement.SelectionMode.FROM; }
+            | <K_IN> { dbSelectionMode = ShowColumnsStatement.SelectionMode.IN; }
+        )
+        dbName = RelObjectNameExt()
+    ]
+    [ (<K_LIKE> likeExpression = SimpleExpression() | <K_WHERE> whereCondition = Expression()) ]
     {
         showColumnsStatement = new ShowColumnsStatement(tableName);
         showColumnsStatement.setModifiers(modifiers);
+        showColumnsStatement.setTableName(tableName);
+        showColumnsStatement.setDbName(dbName);
+        showColumnsStatement.setTableSelectionMode(tableSelectionMode);
+        showColumnsStatement.setDbSelectionMode(dbSelectionMode);
+        showColumnsStatement.setLikeExpression(likeExpression);
+        showColumnsStatement.setWhereCondition(whereCondition);
         return showColumnsStatement;
     }
 }
 
 ShowIndexStatement ShowIndex(): {
+    ShowIndexStatement showIndexStatement;
     String tableName;
-
+    ShowIndexStatement.SelectionMode tableSelectionMode = null;
+    ShowIndexStatement.SelectionMode dbSelectionMode = null;
+    String dbName = null;
+    Expression whereCondition = null;
 }
 {
     <K_SHOW>
     <K_INDEX>
-    <K_FROM> tableName = RelObjectNameExt()
+    (
+       <K_FROM> {tableSelectionMode = ShowIndexStatement.SelectionMode.FROM;}
+       |
+       <K_IN> {tableSelectionMode = ShowIndexStatement.SelectionMode.IN;}
+     )
+     tableName = RelObjectNameExt()
+    [
+        (
+          <K_FROM> {dbSelectionMode = ShowIndexStatement.SelectionMode.FROM; }
+        | <K_IN> { dbSelectionMode = ShowIndexStatement.SelectionMode.IN; }
+        )
+        dbName = RelObjectNameExt()
+    ]
+    [ <K_WHERE> whereCondition = Expression() ]
     {
-        return new ShowIndexStatement(tableName);
+        showIndexStatement = new ShowIndexStatement(tableName);
+        showIndexStatement.setTableName(tableName);
+        showIndexStatement.setDbName(dbName);
+        showIndexStatement.setTableSelectionMode(tableSelectionMode);
+        showIndexStatement.setDbSelectionMode(dbSelectionMode);
+        showIndexStatement.setWhereCondition(whereCondition);
+        return showIndexStatement;
     }
 }
 

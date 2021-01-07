@@ -386,7 +386,7 @@
                 </property>
                 <jdk>[1.8,)</jdk>
             </activation>
-            <build>
+            <!--<build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -409,12 +409,12 @@
                                 <module name="Checker">
                                     <module name="SuppressWarningsFilter" />
                                     <module name="FileTabCharacter" />
-                                    <!-- git checkout may change linefeeds on the fly
+                                    &lt;!&ndash; git checkout may change linefeeds on the fly
                                     <module name="RegexpMultiline">
                                         <property name="format" value="(?s:(\r\n|\r).*)" />
                                         <property name="message" value="CRLF and CR line endings are prohibited, but this file uses them." />
                                     </module>
-                                    -->
+                                    &ndash;&gt;
                                     <module name="TreeWalker">
                                         <module name="AvoidNestedBlocks" />
                                         <module name="ConstantName" />
@@ -448,7 +448,7 @@
                         </dependencies>
                     </plugin>
                 </plugins>
-            </build>
+            </build>-->
         </profile>
         <profile>
             <!-- for building the parser with debug flags -->

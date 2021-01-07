@@ -19,6 +19,6 @@ public class ShowIndexStatementDeParser extends AbstractDeParser<ShowIndexStatem
 
     @Override
     public void deParse(ShowIndexStatement show) {
-        buffer.append("SHOW INDEX FROM ").append(show.getTableName());
+        buffer.append(show);
     }
 }

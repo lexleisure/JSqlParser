@@ -127,17 +127,17 @@ public class UpdateTest {
 
     @Test
     public void testUpdateIssue338() throws JSQLParserException {
-        assertSqlCanBeParsedAndDeparsed("UPDATE mytable SET status = (status & ~1)");
+        assertSqlCanBeParsedAndDeparsed("UPDATE mytable SET `status` = (`status` & ~1)");
     }
 
     @Test
     public void testUpdateIssue338_1() throws JSQLParserException {
-        assertSqlCanBeParsedAndDeparsed("UPDATE mytable SET status = (status & 1)");
+        assertSqlCanBeParsedAndDeparsed("UPDATE mytable SET `status` = (`status` & 1)");
     }
 
     @Test
     public void testUpdateIssue338_2() throws JSQLParserException {
-        assertSqlCanBeParsedAndDeparsed("UPDATE mytable SET status = (status + 1)");
+        assertSqlCanBeParsedAndDeparsed("UPDATE mytable SET `status` = (`status` + 1)");
     }
 
     @Test

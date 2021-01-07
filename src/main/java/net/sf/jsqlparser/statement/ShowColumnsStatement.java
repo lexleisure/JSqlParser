@@ -9,11 +9,18 @@
  */
 package net.sf.jsqlparser.statement;
 
+import net.sf.jsqlparser.expression.Expression;
+
 import java.util.EnumSet;
 
 public class ShowColumnsStatement implements Statement {
 
     private String tableName;
+    private SelectionMode tableSelectionMode;
+    private String dbName;
+    private SelectionMode dbSelectionMode;
+    private Expression likeExpression;
+    private Expression whereCondition;
 
     private EnumSet<Modifiers> modifiers;
 
@@ -33,6 +40,47 @@ public class ShowColumnsStatement implements Statement {
         this.tableName = tableName;
     }
 
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
+    }
+
+    public SelectionMode getTableSelectionMode() {
+        return tableSelectionMode;
+    }
+
+    public void setTableSelectionMode(SelectionMode tableSelectionMode) {
+        this.tableSelectionMode = tableSelectionMode;
+    }
+
+    public SelectionMode getDbSelectionMode() {
+        return dbSelectionMode;
+    }
+
+    public void setDbSelectionMode(SelectionMode dbSelectionMode) {
+        this.dbSelectionMode = dbSelectionMode;
+    }
+
+    public Expression getLikeExpression() {
+        return likeExpression;
+    }
+
+    public void setLikeExpression(Expression likeExpression) {
+        this.likeExpression = likeExpression;
+    }
+
+    public Expression getWhereCondition() {
+        return whereCondition;
+    }
+
+    public void setWhereCondition(Expression whereCondition) {
+        this.whereCondition = whereCondition;
+    }
+
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -40,7 +88,19 @@ public class ShowColumnsStatement implements Statement {
         if (modifiers.contains(Modifiers.FULL)) {
             builder.append(" FULL");
         }
-        builder.append(" COLUMNS FROM ").append(tableName);
+        builder.append(" COLUMNS ").append(tableSelectionMode.name()).append(" ").append(tableName);
+        if (dbName != null) {
+            builder.append(" ").append(dbSelectionMode.name()).append(" ").append(dbName);
+        }
+
+        if (likeExpression != null) {
+            builder.append(" ").append("LIKE").append(" ").append(likeExpression);
+        }
+
+        if (whereCondition != null) {
+            builder.append(" ").append("WHERE").append(" ").append(whereCondition);
+        }
+
         return builder.toString();
     }
 
@@ -64,5 +124,9 @@ public class ShowColumnsStatement implements Statement {
 
     public enum Modifiers {
         FULL
+    }
+
+    public enum SelectionMode {
+        FROM, IN
     }
 }
