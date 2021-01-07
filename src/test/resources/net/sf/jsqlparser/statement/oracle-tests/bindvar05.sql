@@ -8,7 +8,7 @@
 -- #L%
 ---
 select object_name, object_id,
- decode(status, 'INVALID', 'TRUE', 'FALSE') invalid, 
+ decode(`status`, 'INVALID', 'TRUE', 'FALSE') invalid,
  'TRUE' runnable,
  plsql_debug
 from sys.dba_objects o, dba_plsql_object_settings s

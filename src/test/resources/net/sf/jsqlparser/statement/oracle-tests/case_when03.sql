@@ -8,7 +8,7 @@
 -- #L%
 ---
 select
-case (STaTUS)
+case (`STaTUS`)
 when 'N' then 1
 when 'B' then 2
 when 'a' then 3

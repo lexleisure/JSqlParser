@@ -16,7 +16,7 @@ select
 	cast(s2.end_interval_time as date) as end_time,
 	round((cast( (case when s2.end_interval_time > s1.end_interval_time then s2.end_interval_time else s1.end_interval_time end) as date)
 		- cast(s1.end_interval_time as date)) * 86400) as int_secs,
-	case when (s1.status <> 0 or s2.status <> 0) then 1 else 0 end as err_detect,
+	case when (s1.`status` <> 0 or s2.`status` <> 0) then 1 else 0 end as err_detect,
         round( greatest( (extract(day from s2.flush_elapsed) * 86400)
 	       + (extract(hour from s2.flush_elapsed) * 3600)
 	       + (extract(minute from s2.flush_elapsed) * 60)

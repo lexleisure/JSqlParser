@@ -14,7 +14,7 @@ select
 	when STaLENESS > .1 then 256
 	else 0
 	end + aFLaGS aFLaGS,
-	STaTUS,
+	`STaTUS`,
 	SID,
 	SERIaL#,
 	PaRT#,

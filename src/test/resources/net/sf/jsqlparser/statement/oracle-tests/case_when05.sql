@@ -14,7 +14,7 @@ select staleness
   +
   case when row_number() over (partition by (select tcp0.bo# from tabcompart$ tcp0 where tcp0.obj#=st0.bo#) order by staleness, osize, obj#) = 1 then 32
   else 0 end aflags
-, 0 status
+, 0 `status`
 , :b3 sid
 , :b2 serial#
 , part#, bo#

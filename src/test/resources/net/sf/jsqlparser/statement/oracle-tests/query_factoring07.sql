@@ -32,7 +32,7 @@ as
 	and sh.instance_number = sn.instance_number
 	and sh.group_id = 2
 	and sh.metric_id = md.metric_id
-	and md.status = :b2
+	and md.`status` = :b2
 	and ot.obs_time = trunc(sh.end_time, 'hh24')
 )
 (
