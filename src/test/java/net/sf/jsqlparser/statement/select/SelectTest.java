@@ -3094,6 +3094,11 @@ public class SelectTest {
     }
 
     @Test
+    public void testCaseKeyword() throws JSQLParserException {
+        assertSqlCanBeParsedAndDeparsed("SELECT * FROM Case");
+    }
+
+    @Test
     public void testCastToSignedInteger() throws JSQLParserException {
         assertSqlCanBeParsedAndDeparsed("SELECT CAST(contact_id AS SIGNED INTEGER) FROM contact WHERE contact_id = 20");
     }
@@ -4398,4 +4403,10 @@ public class SelectTest {
     public void testH2CaseWhenFunctionIssue1091() throws JSQLParserException {
         assertSqlCanBeParsedAndDeparsed("SELECT CASEWHEN(ID = 1, 'A', 'B') FROM mytable");
     }
+
+    @Test
+    public void testMultiPartTypesIssue992() throws JSQLParserException {
+        assertSqlCanBeParsedAndDeparsed("SELECT CAST('*' AS pg_catalog.text)");
+    }
+
 }
