@@ -163,6 +163,7 @@ TOKEN: /* SQL Keywords. prefixed with K_ to avoid name clashes */
 |   <K_CROSS:"CROSS">
 |   <K_CURRENT: "CURRENT">
 |   <K_CYCLE:"CYCLE">
+|   <K_DATABASE: "DATABASE">
 |   <K_DECLARE: "DECLARE">
 |   <K_DATETIMELITERAL : ("DATE" | "TIME" | "TIMESTAMP") >
 |   <K_DATE_LITERAL : ( "YEAR" | "MONTH" | "DAY" | "HOUR" | "MINUTE" | "SECOND" ) >
@@ -4104,7 +4105,15 @@ CreateSchema CreateSchema():
     List<Statement> statements = new ArrayList<Statement>();
 }
 {
-    <K_CREATE> <K_SCHEMA>
+    <K_CREATE>
+    (
+      <K_SCHEMA> { schema.setSchemaKey(CreateSchema.SchemaKey.SCHEMA); }
+       |
+      <K_DATABASE> { schema.setSchemaKey(CreateSchema.SchemaKey.DATABASE); }
+    )
+    [ <K_IF> { schema.setKeyIf("IF"); } ]
+    [ <K_NOT> { schema.setKeyNot("NOT"); } ]
+    [ <K_EXISTS> { schema.setKeyExists("EXISTS"); } ]
     [ ( tk=<S_IDENTIFIER> | tk=<S_QUOTED_IDENTIFIER>) { schema.setSchemaName(tk.image); } ]
     [ <K_AUTHORIZATION>
         (tk=<S_IDENTIFIER> | tk=<S_QUOTED_IDENTIFIER>) { schema.setAuthorization(tk.image); }

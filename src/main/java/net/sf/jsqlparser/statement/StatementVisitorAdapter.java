@@ -87,7 +87,8 @@ public class StatementVisitorAdapter implements StatementVisitor {
     }
 
     @Override
-    public void visit(CreateSchema aThis) {
+    public void visit(CreateSchema createSchema) {
+
     }
 
     @Override

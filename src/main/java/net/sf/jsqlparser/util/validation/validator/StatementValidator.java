@@ -38,7 +38,6 @@ import net.sf.jsqlparser.statement.update.Update;
 import net.sf.jsqlparser.statement.upsert.Upsert;
 import net.sf.jsqlparser.statement.values.ValuesStatement;
 import net.sf.jsqlparser.util.validation.ValidationCapability;
-import net.sf.jsqlparser.util.validation.metadata.NamedObject;
 
 /**
  * @author gitmotte
@@ -218,9 +217,8 @@ public class StatementValidator extends AbstractValidator<Statement> implements 
     }
 
     @Override
-    public void visit(CreateSchema aThis) {
-        validateFeatureAndName(Feature.createSchema, NamedObject.schema, aThis.getSchemaName());
-        aThis.getStatements().forEach(s -> s.accept(this));
+    public void visit(CreateSchema cs) {
+        getValidator(CreateSchemaValidator.class).validate(cs);
     }
 
     @Override

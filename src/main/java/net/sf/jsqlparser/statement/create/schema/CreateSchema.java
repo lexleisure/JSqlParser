@@ -17,9 +17,17 @@ import java.util.Optional;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.StatementVisitor;
 
+/**
+ * support mysql
+ * reference: https://dev.mysql.com/doc/refman/8.0/en/create-database.html
+ */
 public class CreateSchema implements Statement {
 
     private String authorization;
+    private SchemaKey schemaKey = SchemaKey.SCHEMA;
+    private String keyIf;
+    private String keyNot;
+    private String keyExists;
     private String schemaName;
     private List<String> schemaPath;
     private List<Statement> statements = new ArrayList<>();
@@ -99,6 +107,14 @@ public class CreateSchema implements Statement {
         this.schemaName = schemaName;
     }
 
+    public SchemaKey getSchemaKey() {
+        return schemaKey;
+    }
+
+    public void setSchemaKey(SchemaKey schemaKey) {
+        this.schemaKey = schemaKey;
+    }
+
     /**
      * Set the path of the schema
      *
@@ -110,14 +126,24 @@ public class CreateSchema implements Statement {
     }
 
     public String toString() {
-        String sql = "CREATE SCHEMA";
+        StringBuilder builder = new StringBuilder();
+        builder.append("CREATE ").append(schemaKey.name());
+        if(keyIf != null){
+            builder.append(" IF");
+        }
+        if(keyNot != null){
+            builder.append(" NOT");
+        }
+        if(keyExists != null){
+            builder.append(" EXISTS");
+        }
         if (schemaName != null) {
-            sql += " " + schemaName;
+            builder.append(" ").append(schemaName);
         }
         if (authorization != null) {
-            sql += " AUTHORIZATION " + authorization;
+            builder.append(" AUTHORIZATION ").append(authorization);
         }
-        return sql;
+        return builder.toString();
     }
 
     public CreateSchema withAuthorization(String authorization) {
@@ -146,4 +172,33 @@ public class CreateSchema implements Statement {
         collection.addAll(schemaPath);
         return this.withSchemaPath(collection);
     }
+
+    public String getKeyIf() {
+        return keyIf;
+    }
+
+    public void setKeyIf(String keyIf) {
+        this.keyIf = keyIf;
+    }
+
+    public String getKeyNot() {
+        return keyNot;
+    }
+
+    public void setKeyNot(String keyNot) {
+        this.keyNot = keyNot;
+    }
+
+    public String getKeyExists() {
+        return keyExists;
+    }
+
+    public void setKeyExists(String keyExists) {
+        this.keyExists = keyExists;
+    }
+
+    public enum SchemaKey {
+        SCHEMA, DATABASE
+    }
+
 }

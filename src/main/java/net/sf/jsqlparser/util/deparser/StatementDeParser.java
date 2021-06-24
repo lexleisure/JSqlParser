@@ -291,8 +291,8 @@ public class StatementDeParser extends AbstractDeParser<Statement> implements St
     }
 
     @Override
-    public void visit(CreateSchema aThis) {
-        buffer.append(aThis.toString());
+    public void visit(CreateSchema cs) {
+        new CreateSchemaDeParser(buffer).deParse(cs);
     }
 
     @Override
